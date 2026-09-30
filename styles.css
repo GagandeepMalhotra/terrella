@@ -205,7 +205,7 @@ p { margin: 0; }
    transforms - it drifts sideways and breathes in and out - so the compositor does all of it
    and the page costs nothing to scroll. */
 .stage {
-  --stage-h: clamp(560px, 82svh, 860px);
+  --stage-h: clamp(520px, 74svh, 780px);
   position: relative; overflow: hidden; isolation: isolate;
   height: var(--stage-h);
   display: grid; align-items: center;
@@ -428,7 +428,7 @@ h3 { font-size: 21px; line-height: 1.2; letter-spacing: -0.02em; font-weight: 60
   body { font-size: 16px; }
   .band { padding-block: 56px; }
   h2 { margin-bottom: 28px; }
-  .stage { --stage-h: clamp(520px, 78svh, 680px); }
+  .stage { --stage-h: clamp(480px, 70svh, 620px); }
   .stage .button { width: min(320px, 100%); }
   .stage-meta { font-size: 13px; }
   .stage + .band { margin-top: -24px; border-radius: 24px 24px 0 0; }
