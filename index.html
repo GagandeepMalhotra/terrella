@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Terrella</title>
-  <meta name="description" content="A live hologram of the Minecraft world you're playing, in mixed reality on Meta Quest 3.">
+  <meta name="description" content="See your Minecraft world as a live 3D hologram in your room, on Meta Quest 3 and 3S. Free.">
   <meta name="color-scheme" content="light dark">
   <meta property="og:title" content="Terrella">
-  <meta property="og:description" content="The world you're playing, in the room you're in. Mixed reality on Meta Quest 3.">
+  <meta property="og:description" content="See your Minecraft world as a live 3D hologram in your room, on Meta Quest 3 and 3S.">
   <meta property="og:image" content="assets/world-2400.webp">
   <link rel="icon" href="assets/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <link rel="stylesheet" href="styles.css?v=23">
+  <link rel="stylesheet" href="styles.css?v=33">
 </head>
 <body>
   <header class="nav" id="nav">
@@ -21,9 +21,7 @@
       </a>
       <div class="nav-links">
         <a href="#need-title">What you need</a>
-        <a href="#setup">Set up</a>
         <a href="#faq-title">Questions</a>
-        <a href="https://buymeacoffee.com/gagandeepmalhotra" target="_blank" rel="noopener">Support</a>
       </div>
       <a class="nav-cta" href="#setup">Download</a>
     </nav>
@@ -31,19 +29,21 @@
 
   <main id="top">
     <section class="stage" aria-labelledby="stage-title">
-      <div class="stage-scene" aria-hidden="true">
-        <img class="stage-world" src="assets/world.webp?v=13" width="3840" height="1280" alt=""
-             srcset="assets/world-2400.webp?v=13 2400w, assets/world.webp?v=13 3840w"
+      <div class="stage-scene-wrap" aria-hidden="true">
+      <div class="stage-scene">
+        <img class="stage-world" src="assets/world.webp?v=30" width="3840" height="1280" alt=""
+             srcset="assets/world-2400.webp?v=30 2400w, assets/world.webp?v=30 3840w"
              sizes="(max-width: 800px) 1700px, 2400px" fetchpriority="high" decoding="async">
         <div class="stage-clouds"></div>
       </div>
+      </div>
       <div class="stage-copy">
         <h1 id="stage-title" class="stage-title">Terrella</h1>
-        <p class="stage-line">The world you're playing, in the room you're in.</p>
+        <p class="stage-line">See your Minecraft world as a live 3D hologram in your room.</p>
         <p class="stage-actions">
           <a class="button" href="#setup">Get started</a>
-          <a class="button button-glass glass" data-lg href="#need-title">What you need</a>
         </p>
+        <p class="stage-meta">Free &middot; Meta Quest 3 and 3S &middot; Minecraft Java Edition</p>
       </div>
     </section>
 
@@ -52,18 +52,32 @@
         <h2 id="need-title">What you need</h2>
         <ul class="grid three">
           <li>
+            <svg class="need-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5c0-2.5 2-4.5 4.5-4.5h15c2.5 0 4.5 2 4.5 4.5v6c0 2.5-2 4.5-4.5 4.5h-3.2a3 3 0 0 1-2.7-1.7l-.4-.8a1.4 1.4 0 0 0-2.4 0l-.4.8a3 3 0 0 1-2.7 1.7H8.5C6 23 4 21 4 18.5z"/><path d="M4 14H2.5M28 14h1.5"/></svg>
             <h3>Meta Quest 3 or 3S</h3>
-            <p>With the Terrella app.</p>
+            <p>Mixed reality, with the Terrella app.</p>
           </li>
           <li>
+            <svg class="need-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 4 27 9.5v13L16 28 5 22.5v-13z"/><path d="M5 9.5 16 15l11-5.5M16 15v13"/></svg>
             <h3>Minecraft Java Edition</h3>
             <p>1.19.4 to 26.2, with Fabric.</p>
           </li>
           <li>
+            <svg class="need-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5a17 17 0 0 1 24 0M8.2 16.8a11 11 0 0 1 15.6 0M12.4 21a5 5 0 0 1 7.2 0"/><circle cx="16" cy="25" r="1.2" fill="currentColor"/></svg>
             <h3>One Wi&#8209;Fi network</h3>
             <p>Your PC and headset on the same one.</p>
           </li>
         </ul>
+      </div>
+    </section>
+
+    <section class="band demo" id="demo" aria-labelledby="demo-title" hidden>
+      <div class="wrap">
+        <h2 id="demo-title">See it on Meta Quest&nbsp;3</h2>
+        <div class="demo-frame">
+          <video controls playsinline preload="none" poster="assets/demo-poster.jpg">
+            <source src="assets/demo.mp4" type="video/mp4">
+          </video>
+        </div>
       </div>
     </section>
 
@@ -99,7 +113,7 @@
           <span class="step-n" aria-hidden="true">3</span>
           <div class="step-body">
             <h3>Join a world, then pinch to place</h3>
-            <p>The headset finds Minecraft by itself. If it can't, choose <b>Enter address</b>
+            <p>The headset finds Minecraft by itself. If it doesn't, choose <b>Enter address</b>
                and type the address Minecraft shows in chat.</p>
           </div>
         </li>
@@ -143,10 +157,6 @@
           <summary>Do shader packs show up?</summary>
           <p>No. Resource packs do; shader packs change only the picture on your screen, which the headset never sees.</p>
         </details>
-        <details>
-          <summary>The headset can't find Minecraft.</summary>
-          <p>Check both are on the same Wi&#8209;Fi, then use <b>Enter address</b> with the address Minecraft shows in chat when you join a world.</p>
-        </details>
       </div>
       </div>
     </section>
@@ -155,11 +165,22 @@
   <footer class="footer">
     <div class="wrap footer-row">
       <p class="credit">&copy; 2026 Gagandeep Malhotra</p>
-      <p><a href="https://buymeacoffee.com/gagandeepmalhotra" target="_blank" rel="noopener">Buy me a coffee</a> &middot; <a href="privacy.html">Privacy</a></p>
+      <p><a href="privacy.html">Privacy</a></p>
       <p>Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p>
     </div>
   </footer>
 
-  <script src="main.js?v=23" type="module"></script>
+  <a class="coffee glass" href="https://buymeacoffee.com/gagandeepmalhotra" target="_blank" rel="noopener"
+     aria-label="Buy me a coffee">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+         stroke-linejoin="round" aria-hidden="true">
+      <path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V9Z"/>
+      <path d="M17 11h1.5a2.5 2.5 0 0 1 0 5H17"/>
+      <path d="M8 3.5c-.6.8-.6 1.7 0 2.5M11.5 3.5c-.6.8-.6 1.7 0 2.5"/>
+    </svg>
+    <span class="coffee-label">Buy me a coffee</span>
+  </a>
+
+  <script src="main.js?v=32" type="module"></script>
 </body>
 </html>

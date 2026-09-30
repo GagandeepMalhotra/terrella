@@ -212,3 +212,13 @@ if (clouds) {
   clouds.style.backgroundImage = `url(${canvas.toDataURL()})`;
   clouds.classList.add("is-ready");
 }
+
+// ── Demo film ─────────────────────────────────────────────────────────────────
+// The section stays hidden until assets/demo.mp4 exists, so adding the film is just adding
+// the file.
+const demo = document.getElementById("demo");
+if (demo) {
+  fetch("assets/demo.mp4", { method: "HEAD" })
+    .then((r) => { if (r.ok) demo.hidden = false; })
+    .catch(() => {});
+}
