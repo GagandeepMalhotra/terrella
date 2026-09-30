@@ -176,48 +176,56 @@ if (chromium && glassy.length && !matchMedia("(prefers-reduced-transparency: red
 
 
 // ── Clouds ────────────────────────────────────────────────────────────────────
-// Shaped the way Minecraft's are: its cloud layer is a low-resolution map where every pixel is
-// a 12x12-block slab, so clouds have stepped, ragged edges - notches, holes, single-cell
-// strays - and flat white tops with a sliver of grey side where the view is tilted. Generated
-// here as noise with a fine octave for that raggedness (no game files); one seamless tile,
-// drawn once, slid by the compositor.
+// Minecraft's clouds are simple: flat slabs whose outlines are a few rectangles run together -
+// a long bar, an L, a T, a block with a notch. Each is built here from two to four overlapping
+// rectangles of 12-block cells, spaced so they never touch, with a white top and a thin grey
+// south face. Generated (no game files); one seamless tile, drawn once, slid by the compositor.
 const clouds = document.querySelector(".stage-clouds");
 if (clouds) {
-  const CW = 64, CH = 24;                         // cells in one tile
+  const CW = 72, CH = 28;                         // cells in one tile
   const PX = 4;                                   // canvas pixels per cell
-  let seed = 4242;
+  let seed = 912;
   const rand = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
-  const grid = (gw, gh) => Array.from({ length: gh }, () => Array.from({ length: gw }, rand));
-  const octaves = [[grid(6, 2), 0.5], [grid(12, 4), 0.3], [grid(24, 8), 0.15], [grid(64, 24), 0.05]];
-  const sample = (g, x, y) => {                   // smooth, wrapping interpolation
-    const gh = g.length, gw = g[0].length;
-    const fx = (x / CW) * gw, fy = (y / CH) * gh;
-    const x0 = Math.floor(fx), y0 = Math.floor(fy), tx = fx - x0, ty = fy - y0;
-    const at = (i, k) => g[((k % gh) + gh) % gh][((i % gw) + gw) % gw];
-    const sx = tx * tx * (3 - 2 * tx), sy = ty * ty * (3 - 2 * ty);
-    const top = at(x0, y0) + (at(x0 + 1, y0) - at(x0, y0)) * sx;
-    const bot = at(x0, y0 + 1) + (at(x0 + 1, y0 + 1) - at(x0, y0 + 1)) * sx;
-    return top + (bot - top) * sy;
-  };
+  const ri = (a, b) => a + Math.floor(rand() * (b - a + 1));
   const on = new Uint8Array(CW * CH);
-  for (let y = 0; y < CH; y++)
-    for (let x = 0; x < CW; x++) {
-      let v = 0;
-      for (const [g, w] of octaves) v += sample(g, x, y) * w;
-      on[y * CW + x] = v > 0.63 ? 1 : 0;
+  const idx = (x, y) => (((y % CH) + CH) % CH) * CW + (((x % CW) + CW) % CW);
+  const free = (x0, y0, w, h) => {                // one clear cell all round
+    for (let y = y0 - 1; y <= y0 + h; y++)
+      for (let x = x0 - 1; x <= x0 + w; x++) if (on[idx(x, y)]) return false;
+    return true;
+  };
+  for (let n = 0, tries = 0; n < 9 && tries < 400; tries++) {
+    const w = ri(6, 14), h = ri(3, 6);
+    const x0 = ri(0, CW - 1), y0 = ri(0, CH - 1);
+    const rects = [[0, 0, w, h]];
+    for (let k = ri(1, 3); k > 0; k--) {          // add a lobe: an L, a T, a step
+      const lw = ri(2, Math.max(2, w - 2)), lh = ri(2, 4);
+      const side = ri(0, 3);
+      const lx = side === 0 ? ri(0, w - lw) : side === 1 ? ri(0, w - lw) : side === 2 ? -ri(1, 3) : w - ri(0, 1);
+      const ly = side === 0 ? -lh + 1 : side === 1 ? h - 1 : ri(0, Math.max(0, h - lh));
+      rects.push([lx, ly, side >= 2 ? ri(2, 4) : lw, lh]);
     }
-  const at = (x, y) => on[(((y % CH) + CH) % CH) * CW + (((x % CW) + CW) % CW)];
+    let bx0 = 1e9, by0 = 1e9, bx1 = -1e9, by1 = -1e9;
+    for (const [rx, ry, rw, rh] of rects) {
+      bx0 = Math.min(bx0, rx); by0 = Math.min(by0, ry); bx1 = Math.max(bx1, rx + rw); by1 = Math.max(by1, ry + rh);
+    }
+    if (!free(x0 + bx0, y0 + by0, bx1 - bx0, by1 - by0)) continue;
+    for (const [rx, ry, rw, rh] of rects)
+      for (let y = ry; y < ry + rh; y++)
+        for (let x = rx; x < rx + rw; x++) on[idx(x0 + x, y0 + y)] = 1;
+    n++;
+  }
   const canvas = document.createElement("canvas");
   canvas.width = CW * PX; canvas.height = CH * PX;
   const ctx = canvas.getContext("2d");
   for (let y = 0; y < CH; y++)
     for (let x = 0; x < CW; x++) {
-      if (!at(x, y)) continue;
+      if (!on[idx(x, y)]) continue;
       ctx.fillStyle = "#ffffff";
       ctx.fillRect(x * PX, y * PX, PX, PX);
-      if (!at(x, y + 1)) {                        // the south face, seen past the top
+      if (!on[idx(x, y + 1)]) {                   // the south face, seen past the top
         ctx.fillStyle = "#d6dde6";
-        ctx.fillRect(x * PX, ((y + 1) % CH) * PX, PX, Math.max(1, PX / 4));
+        ctx.fillRect(x * PX, ((y + 1) % CH) * PX, PX, 1);
       }
     }
   const tile = CW * 32;                           // on screen, ~32 px a cell: 12 blocks at this height
