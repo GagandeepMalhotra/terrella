@@ -172,42 +172,51 @@ if (chromium && glassy.length && !matchMedia("(prefers-reduced-transparency: red
 
 
 // ── Clouds ────────────────────────────────────────────────────────────────────
-// Minecraft's fancy clouds seen from above: flat slabs built from 12-block cells, a bright
-// top face and the grey of a side face showing just below it where the view is tilted. The
-// shapes come from wrap-around value noise generated here (no game files), cut so the sky stays
-// mostly clear. One seamless tile, drawn once; the stylesheet slides it.
+// Shaped the way Minecraft's are: its cloud layer is a low-resolution map where every pixel is
+// a 12x12-block slab, so clouds have stepped, ragged edges - notches, holes, single-cell
+// strays - and flat white tops with a sliver of grey side where the view is tilted. Generated
+// here as noise with a fine octave for that raggedness (no game files); one seamless tile,
+// drawn once, slid by the compositor.
 const clouds = document.querySelector(".stage-clouds");
 if (clouds) {
-  const CW = 72, CH = 30;                       // cloud cells in one tile (a cell is 12 blocks)
-  const PX = 8;                                 // canvas pixels per cell
-  let seed = 20260930;
+  const CW = 64, CH = 24;                         // cells in one tile
+  const PX = 4;                                   // canvas pixels per cell
+  let seed = 4242;
   const rand = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
   const grid = (gw, gh) => Array.from({ length: gh }, () => Array.from({ length: gw }, rand));
-  const coarse = grid(9, 4), fine = grid(18, 8);
-  const sample = (g, x, y) => {                 // smooth, wrapping interpolation
+  const octaves = [[grid(6, 2), 0.5], [grid(12, 4), 0.3], [grid(24, 8), 0.15], [grid(64, 24), 0.05]];
+  const sample = (g, x, y) => {                   // smooth, wrapping interpolation
     const gh = g.length, gw = g[0].length;
     const fx = (x / CW) * gw, fy = (y / CH) * gh;
     const x0 = Math.floor(fx), y0 = Math.floor(fy), tx = fx - x0, ty = fy - y0;
-    const at = (i, k) => g[(k + gh) % gh][(i + gw) % gw];
+    const at = (i, k) => g[((k % gh) + gh) % gh][((i % gw) + gw) % gw];
     const sx = tx * tx * (3 - 2 * tx), sy = ty * ty * (3 - 2 * ty);
     const top = at(x0, y0) + (at(x0 + 1, y0) - at(x0, y0)) * sx;
     const bot = at(x0, y0 + 1) + (at(x0 + 1, y0 + 1) - at(x0, y0 + 1)) * sx;
     return top + (bot - top) * sy;
   };
-  const cells = [];
+  const on = new Uint8Array(CW * CH);
   for (let y = 0; y < CH; y++)
-    for (let x = 0; x < CW; x++)
-      if (sample(coarse, x, y) * 0.75 + sample(fine, x, y) * 0.25 > 0.66) cells.push([x, y]);
+    for (let x = 0; x < CW; x++) {
+      let v = 0;
+      for (const [g, w] of octaves) v += sample(g, x, y) * w;
+      on[y * CW + x] = v > 0.63 ? 1 : 0;
+    }
+  const at = (x, y) => on[(((y % CH) + CH) % CH) * CW + (((x % CW) + CW) % CW)];
   const canvas = document.createElement("canvas");
   canvas.width = CW * PX; canvas.height = CH * PX;
   const ctx = canvas.getContext("2d");
-  const wrap = (fn) => { for (const [x, y] of cells) for (const dx of [0, -CW]) for (const dy of [0, -CH]) fn(x + dx, y + dy); };
-  const side = Math.round(PX * 0.28);           // the side face below each slab
-  ctx.fillStyle = "rgb(205, 212, 224)";
-  wrap((x, y) => ctx.fillRect((x < 0 ? x + CW : x) * PX, ((y < 0 ? y + CH : y) * PX + side) % (CH * PX), PX, PX));
-  ctx.fillStyle = "rgb(255, 255, 255)";
-  for (const [x, y] of cells) ctx.fillRect(x * PX, y * PX, PX, PX);
-  const tile = CW * 30;                         // on screen, ~30 px a cell
+  for (let y = 0; y < CH; y++)
+    for (let x = 0; x < CW; x++) {
+      if (!at(x, y)) continue;
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(x * PX, y * PX, PX, PX);
+      if (!at(x, y + 1)) {                        // the south face, seen past the top
+        ctx.fillStyle = "#d6dde6";
+        ctx.fillRect(x * PX, ((y + 1) % CH) * PX, PX, Math.max(1, PX / 4));
+      }
+    }
+  const tile = CW * 32;                           // on screen, ~32 px a cell: 12 blocks at this height
   clouds.style.setProperty("--cloud-tile", `${tile}px`);
   clouds.style.backgroundImage = `url(${canvas.toDataURL()})`;
   clouds.classList.add("is-ready");
