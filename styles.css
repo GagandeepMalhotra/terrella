@@ -405,12 +405,13 @@ h3 { font-size: 21px; line-height: 1.2; letter-spacing: -0.02em; font-weight: 60
   position: fixed; right: 20px; bottom: 20px; z-index: 30;
   width: 56px; height: 56px; border-radius: 50%;
   display: grid; place-items: center;
-  color: var(--text);
+  background: #ffdd00;                     /* Buy Me a Coffee's own yellow */
+  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.35), 0 1px 3px rgba(0, 0, 0, 0.12);
   transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .coffee:hover { transform: scale(1.06); text-decoration: none; }
 .coffee:active { transform: scale(0.96); }
-.coffee svg { width: 26px; height: 26px; }
+.coffee img { width: 21px; height: 30px; }
 .coffee-label {
   position: absolute; right: calc(100% + 10px); top: 50%;
   transform: translate(6px, -50%); opacity: 0; pointer-events: none; white-space: nowrap;
