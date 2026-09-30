@@ -1,0 +1,368 @@
+/* VoxelMR - one page. Apple's system type and spacing, Airbnb's soft corners. */
+
+:root {
+  --bg: #ffffff;
+  --bg-alt: #f5f5f7;
+  --text: #1d1d1f;
+  --text-2: #6e6e73;
+  --line: #d2d2d7;
+  --accent: #2f7a36;          /* the grass on the block */
+  --accent-hover: #256a2c;
+  --on-accent: #ffffff;
+  --shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.35);
+  --radius: 18px;
+  --glass-tint: rgba(255, 255, 255, 0.66);
+  --glass-blur: 16px;
+  --glass-rim-hi: rgba(255, 255, 255, 0.95);
+  --glass-rim-lo: rgba(255, 255, 255, 0.5);
+  --glass-rim-back: rgba(255, 255, 255, 0.55);
+  --glass-inner: rgba(0, 0, 0, 0.06);
+  --glass-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.06);
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI Variable Text",
+          "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e0f12;             /* the splash screen's ground */
+    --bg-alt: #17181c;
+    --text: #f5f5f7;
+    --text-2: #a1a1a6;
+    --line: #2e2f35;
+    --accent: #6cc05f;
+    --accent-hover: #81cf74;
+    --on-accent: #0b1a0b;
+    --shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9);
+    --glass-tint: rgba(58, 60, 68, 0.52);
+    --glass-blur: 16px;
+    --glass-rim-hi: rgba(255, 255, 255, 0.32);
+    --glass-rim-lo: rgba(255, 255, 255, 0.1);
+    --glass-rim-back: rgba(255, 255, 255, 0.12);
+    --glass-inner: rgba(0, 0, 0, 0.35);
+    --glass-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.6);
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0e0f12;
+  --bg-alt: #17181c;
+  --text: #f5f5f7;
+  --text-2: #a1a1a6;
+  --line: #2e2f35;
+  --accent: #6cc05f;
+  --accent-hover: #81cf74;
+  --on-accent: #0b1a0b;
+  --shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9);
+  --glass-tint: rgba(58, 60, 68, 0.52);
+  --glass-blur: 16px;
+  --glass-rim-hi: rgba(255, 255, 255, 0.32);
+  --glass-rim-lo: rgba(255, 255, 255, 0.1);
+  --glass-rim-back: rgba(255, 255, 255, 0.12);
+  --glass-inner: rgba(0, 0, 0, 0.35);
+  --glass-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.6);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 17px/1.47 var(--font);
+  letter-spacing: -0.022em;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { display: block; max-width: 100%; height: auto; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+code { font: 0.9em var(--mono); background: color-mix(in srgb, var(--text) 8%, transparent); padding: 0.1em 0.35em; border-radius: 6px; }
+ul, ol { list-style: none; margin: 0; padding: 0; }
+h1, h2, h3 { margin: 0; text-wrap: balance; }
+p { margin: 0; }
+
+.wrap { width: min(980px, 100% - 32px); margin-inline: auto; }
+.section { padding-block: clamp(64px, 10vw, 112px); }
+.band { background: var(--bg-alt); padding-block: clamp(64px, 10vw, 112px); }
+.band.plain { background: var(--bg); }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* Liquid Glass - the controls layer only.
+   Apple's rule: glass is for what floats above content (navigation, controls), never for the
+   content itself, and never glass on glass. A light blur that keeps what is behind readable, a
+   bright rim where light catches the edge, a sheen across the top, and a tint that follows what
+   is underneath. Chromium browsers also bend the picture at the edges (main.js builds the
+   refraction map); everywhere else the same glass simply does not refract. */
+.glass {
+  position: relative; isolation: isolate;
+  background: var(--glass-tint);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%) brightness(1.06);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%) brightness(1.06);
+  box-shadow:
+    var(--glass-shadow),
+    inset 0 1px 1px 0 var(--glass-rim-hi),          /* light from above catches the top edge */
+    inset 0 -1px 1px 0 var(--glass-rim-back),       /* and returns faintly off the bottom */
+    inset 0 0 0 1px var(--glass-rim-lo),            /* the thin body of the edge all round */
+    inset 0 -10px 20px -14px var(--glass-inner);    /* a little depth low inside the glass */
+}
+/* Where the browser can refract (Chromium): the bend at the edge, then the same frost. */
+.lg-refract .glass[data-lg] {
+  -webkit-backdrop-filter: var(--lg-filter) blur(var(--glass-blur)) saturate(180%) brightness(1.06);
+  backdrop-filter: var(--lg-filter) blur(var(--glass-blur)) saturate(180%) brightness(1.06);
+}
+
+/* The bar: a capsule floating over the page, not a strip glued to its top. */
+.nav {
+  position: fixed; top: 12px; left: 0; right: 0; z-index: 20;
+  display: flex; justify-content: center; pointer-events: none;
+}
+.nav-bar {
+  pointer-events: auto;
+  width: min(980px, 100% - 24px); height: 52px; padding: 0 8px 0 18px;
+  border-radius: 999px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  color: var(--text);
+  transition: height 0.35s cubic-bezier(0.22, 1, 0.36, 1), width 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              color 0.3s ease, background-color 0.3s ease;
+}
+.nav.is-compact .nav-bar { height: 46px; width: min(760px, 100% - 24px); }
+.brand {
+  display: inline-flex; align-items: center; gap: 8px;
+  color: inherit; font-weight: 600; font-size: 17px;
+}
+.brand:hover { text-decoration: none; }
+.brand img { image-rendering: pixelated; }
+.nav-links { display: flex; gap: 22px; }
+.nav-links a { color: inherit; font-size: 14px; opacity: 0.88; transition: opacity 0.2s ease; }
+.nav-links a:hover { opacity: 1; text-decoration: none; }
+.nav-cta {
+  display: inline-flex; align-items: center; height: 34px; padding: 0 16px; border-radius: 999px;
+  background: var(--accent); color: var(--on-accent); font-size: 14px; font-weight: 500;
+}
+.nav-cta:hover { background: var(--accent-hover); text-decoration: none; }
+/* Over the world the glass darkens a touch and the words go white, as iOS does over photos. */
+.nav.over-hero .nav-bar {
+  color: #ffffff;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+  --glass-tint: rgba(255, 255, 255, 0.28);
+  --glass-blur: 12px;
+  --glass-rim-hi: rgba(255, 255, 255, 0.85);
+  --glass-rim-lo: rgba(255, 255, 255, 0.32);
+  --glass-rim-back: rgba(255, 255, 255, 0.4);
+  --glass-inner: rgba(0, 0, 0, 0.12);
+  --glass-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.35);
+}
+.nav.over-hero .nav-cta { background: #ffffff; color: #1d1d1f; }
+@media (max-width: 720px) { .nav-links { display: none; } }
+
+/* Buttons: Apple's pill. */
+.button {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 44px; padding: 0 22px;
+  border-radius: 980px;
+  background: var(--accent); color: var(--on-accent);
+  font-weight: 500; font-size: 17px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.button:hover { background: var(--accent-hover); text-decoration: none; }
+.button:active { transform: scale(0.97); }
+.button-small { min-height: 30px; padding: 0 14px; font-size: 14px; }
+.button-glass { color: inherit; font-weight: 500; }
+.stage .button.button-glass {
+  background: var(--glass-tint);
+  color: #ffffff;
+  --glass-tint: rgba(255, 255, 255, 0.28);
+  --glass-blur: 12px;
+  --glass-rim-hi: rgba(255, 255, 255, 0.85);
+  --glass-rim-lo: rgba(255, 255, 255, 0.32);
+  --glass-rim-back: rgba(255, 255, 255, 0.4);
+  --glass-inner: rgba(0, 0, 0, 0.12);
+  --glass-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.35);
+}
+.stage .button.button-glass:hover { background: rgba(255, 255, 255, 0.36); color: #ffffff; }
+.button-quiet { background: transparent; color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.button-quiet:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+
+/* The stage: a bird's-eye view of a real world, edge to edge. One still image, moved only by
+   transforms - it drifts sideways and breathes in and out - so the compositor does all of it
+   and the page costs nothing to scroll. */
+.stage {
+  --stage-h: clamp(560px, 82svh, 860px);
+  position: relative; overflow: hidden; isolation: isolate;
+  height: var(--stage-h);
+  display: grid; place-items: center;
+  background: transparent; color: #ffffff; text-align: center;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 72%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 72%, transparent 100%);
+}
+.stage-scene {
+  position: absolute; inset: 0; z-index: -1;
+  animation: breathe 24s ease-in-out infinite alternate;
+  will-change: transform;
+}
+.stage-world {
+  --scene-w: max(100vw, calc(var(--stage-h) * 3));
+  position: absolute; top: 0; left: 0;
+  width: var(--scene-w); height: 100%; max-width: none;
+  object-fit: cover;
+  animation: drift 70s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes drift {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(calc(100vw - var(--scene-w)), 0, 0); }
+}
+@keyframes breathe {
+  from { transform: scale(1.02); }
+  to   { transform: scale(1.12); }
+}
+/* Clouds: Minecraft's own blocky slabs, passing between the camera and the world. Drawn by
+   main.js into one seamless tile and slid sideways by the compositor - the page never repaints
+   for them. */
+.stage-clouds {
+  position: absolute; top: 0; bottom: 0; left: 0;
+  width: calc(100% + var(--cloud-tile, 2400px));
+  background-repeat: repeat;
+  background-size: var(--cloud-tile, 2400px) auto;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 0.5px rgba(255, 255, 255, 0.4));
+  opacity: 0; transition: opacity 1.2s ease;
+  animation: clouds 150s linear infinite;
+  will-change: transform;
+}
+.stage-clouds.is-ready { opacity: 0.78; }
+@keyframes clouds {
+  from { transform: translate3d(calc(-1 * var(--cloud-tile, 2400px)), 0, 0); }
+  to   { transform: translate3d(0, 0, 0); }
+}
+@media (prefers-reduced-motion: reduce) { .stage-clouds { animation: none; } }
+.stage.is-away .stage-clouds { animation-play-state: paused; }
+
+.stage::after {                  /* shade enough for white words; the world still reads */
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 48%, rgba(0,0,0,0.42), rgba(0,0,0,0) 72%),
+    linear-gradient(to bottom, rgba(0,0,0,0.28), rgba(0,0,0,0.08) 40%, rgba(0,0,0,0.3));
+}
+.stage-copy { width: min(980px, 100% - 32px); }
+.stage-title {
+  font-size: clamp(56px, 11vw, 136px);
+  line-height: 0.95; letter-spacing: -0.045em; font-weight: 600;
+}
+.stage-line {
+  margin: clamp(12px, 1.6vw, 18px) auto 0; max-width: 34ch; text-wrap: balance;
+  font-size: clamp(19px, 2.2vw, 25px); line-height: 1.25; letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.86);
+}
+.stage-actions {
+  margin-top: clamp(22px, 2.8vw, 30px);
+  display: flex; gap: 24px; justify-content: center; align-items: center; flex-wrap: wrap;
+}
+.stage .button { background: #ffffff; color: #1d1d1f; }
+.stage .button:hover { background: #f5f5f7; }
+.more { color: #ffffff; font-size: 17px; }
+.more::after { content: "›"; display: inline-block; margin-left: 6px; transition: transform 0.2s ease; }
+.more:hover { text-decoration: none; }
+.more:hover::after { transform: translateX(3px); }
+
+/* The words settle in once as the page opens - plain CSS, so nothing flashes while a script
+   loads. Nothing moves at all for anyone who asked for less motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .stage-copy > * { animation: settle 1s cubic-bezier(0.22, 1, 0.36, 1) backwards; }
+  .stage-line    { animation-delay: 0.1s; }
+  .stage-actions { animation-delay: 0.2s; }
+}
+@keyframes settle { from { opacity: 0; transform: translateY(14px); } }
+@media (prefers-reduced-motion: reduce) {
+  .stage-scene, .stage-world { animation: none; }
+  .stage-world { transform: translate3d(calc((100vw - var(--scene-w)) / 2), 0, 0); }
+}
+/* Off screen, the hero stops moving altogether (main.js). */
+.stage.is-away .stage-scene, .stage.is-away .stage-world { animation-play-state: paused; }
+
+/* Section titles */
+h2 {
+  font-size: clamp(32px, 5vw, 48px);
+  line-height: 1.08; letter-spacing: -0.03em; font-weight: 700;
+  margin-bottom: clamp(32px, 5vw, 48px);
+}
+h3 { font-size: 21px; line-height: 1.2; letter-spacing: -0.02em; font-weight: 600; margin-bottom: 6px; }
+.grid p, .step-body p, .faq p { color: var(--text-2); }
+
+.grid { display: grid; gap: clamp(28px, 4vw, 48px); }
+.grid.three { grid-template-columns: repeat(3, 1fr); }
+.grid.two { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 720px) {
+  .grid.three, .grid.two { grid-template-columns: 1fr; }
+}
+
+/* Steps: a real sequence, so numbered. */
+.steps { display: grid; gap: 40px; }
+.step { display: grid; grid-template-columns: 44px 1fr; gap: 20px; align-items: start; }
+.step-n {
+  display: grid; place-items: center;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--bg); color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--line);
+  font-weight: 600; font-variant-numeric: tabular-nums;
+}
+.step-body { padding-top: 8px; max-width: 60ch; }
+.step-body .button, .picker { margin-top: 18px; }
+
+.picker { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.picker .button { margin-top: 0; }
+.select { position: relative; display: inline-flex; }
+.select select {
+  appearance: none; -webkit-appearance: none;
+  min-height: 44px; padding: 0 44px 0 18px;
+  border-radius: 12px; border: 1px solid var(--line);
+  background: var(--bg); color: var(--text);
+  font: 500 17px var(--font); letter-spacing: -0.022em;
+  font-variant-numeric: tabular-nums; cursor: pointer;
+}
+.select::after {
+  content: ""; position: absolute; right: 18px; top: 50%;
+  width: 8px; height: 8px; margin-top: -6px;
+  border-right: 2px solid var(--text-2); border-bottom: 2px solid var(--text-2);
+  transform: rotate(45deg); pointer-events: none;
+}
+
+/* Questions: a disclosure that opens smoothly. */
+.faq { border-top: 1px solid var(--line); max-width: 760px; }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary {
+  display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  padding: 22px 0; cursor: pointer; list-style: none;
+  font-size: 19px; font-weight: 600; letter-spacing: -0.02em;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: "+"; font-weight: 400; font-size: 26px; line-height: 1; color: var(--text-2);
+  transition: transform 0.25s ease;
+}
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq details p { padding: 0 0 22px; max-width: 60ch; }
+.faq details::details-content {
+  block-size: 0; overflow: hidden;
+  transition: block-size 0.3s ease, content-visibility 0.3s allow-discrete;
+}
+.faq details[open]::details-content { block-size: auto; }
+:root { interpolate-size: allow-keywords; }
+@media (prefers-reduced-motion: reduce) {
+  .faq details::details-content { transition: none; }
+}
+
+.footer { padding-block: 32px 48px; border-top: 1px solid var(--line); }
+.footer-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+.footer p { font-size: 12px; color: var(--text-2); letter-spacing: 0; }
+.footer .credit { color: var(--text); }

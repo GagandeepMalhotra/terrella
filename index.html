@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Terrella</title>
+  <meta name="description" content="A live hologram of the Minecraft world you're playing, in mixed reality on Meta Quest 3.">
+  <meta name="color-scheme" content="light dark">
+  <meta property="og:title" content="Terrella">
+  <meta property="og:description" content="The world you're playing, in the room you're in. Mixed reality on Meta Quest 3.">
+  <meta property="og:image" content="assets/world-2400.webp">
+  <link rel="icon" href="assets/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="styles.css?v=23">
+</head>
+<body>
+  <header class="nav" id="nav">
+    <nav class="nav-bar glass" data-lg aria-label="Main">
+      <a class="brand" href="#top" aria-label="Terrella, back to top">
+        <img src="assets/block.png" alt="" width="22" height="22">Terrella
+      </a>
+      <div class="nav-links">
+        <a href="#need-title">What you need</a>
+        <a href="#setup">Set up</a>
+        <a href="#faq-title">Questions</a>
+        <a href="https://buymeacoffee.com/gagandeepmalhotra" target="_blank" rel="noopener">Support</a>
+      </div>
+      <a class="nav-cta" href="#setup">Download</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="stage" aria-labelledby="stage-title">
+      <div class="stage-scene" aria-hidden="true">
+        <img class="stage-world" src="assets/world.webp?v=13" width="3840" height="1280" alt=""
+             srcset="assets/world-2400.webp?v=13 2400w, assets/world.webp?v=13 3840w"
+             sizes="(max-width: 800px) 1700px, 2400px" fetchpriority="high" decoding="async">
+        <div class="stage-clouds"></div>
+      </div>
+      <div class="stage-copy">
+        <h1 id="stage-title" class="stage-title">Terrella</h1>
+        <p class="stage-line">The world you're playing, in the room you're in.</p>
+        <p class="stage-actions">
+          <a class="button" href="#setup">Get started</a>
+          <a class="button button-glass glass" data-lg href="#need-title">What you need</a>
+        </p>
+      </div>
+    </section>
+
+    <section class="band plain" aria-labelledby="need-title">
+      <div class="wrap">
+        <h2 id="need-title">What you need</h2>
+        <ul class="grid three">
+          <li>
+            <h3>Meta Quest 3 or 3S</h3>
+            <p>With the Terrella app.</p>
+          </li>
+          <li>
+            <h3>Minecraft Java Edition</h3>
+            <p>1.19.4 to 26.2, with Fabric.</p>
+          </li>
+          <li>
+            <h3>One Wi&#8209;Fi network</h3>
+            <p>Your PC and headset on the same one.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="setup" class="band" aria-labelledby="setup-title">
+      <div class="wrap">
+      <h2 id="setup-title">Set up</h2>
+      <ol class="steps">
+        <li class="step">
+          <span class="step-n" aria-hidden="true">1</span>
+          <div class="step-body">
+            <h3>Install the mod</h3>
+            <p>Pick your Minecraft version, then put the file in your <code>mods</code> folder.
+               It needs <a href="https://fabricmc.net/use/installer/">Fabric Loader</a> and
+               <a href="https://modrinth.com/mod/fabric-api">Fabric API</a>.</p>
+            <div class="picker">
+              <label class="select">
+                <span class="visually-hidden">Minecraft version</span>
+                <select id="mc-version"></select>
+              </label>
+              <a id="mod-download" class="button" href="downloads/voxelmr-mod-mc26.2.jar" download>Download</a>
+            </div>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step-n" aria-hidden="true">2</span>
+          <div class="step-body">
+            <h3>Install the app on your Quest</h3>
+            <p id="app-note">Coming soon.</p>
+            <a id="app-link" class="button button-quiet" hidden>Get the app</a>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step-n" aria-hidden="true">3</span>
+          <div class="step-body">
+            <h3>Join a world, then pinch to place</h3>
+            <p>The headset finds Minecraft by itself. If it can't, choose <b>Enter address</b>
+               and type the address Minecraft shows in chat.</p>
+          </div>
+        </li>
+      </ol>
+      </div>
+    </section>
+
+    <section class="band plain" aria-labelledby="see-title">
+      <div class="wrap">
+        <h2 id="see-title">What you see</h2>
+        <ul class="grid two">
+          <li>
+            <h3>Straight from your game</h3>
+            <p>Blocks, mobs and items come from Minecraft itself, so mods and resource packs just work.</p>
+          </li>
+          <li>
+            <h3>As it happens</h3>
+            <p>Weather, day and night, light and particles, in step with the game.</p>
+          </li>
+          <li>
+            <h3>Table or floor</h3>
+            <p>Set it on a table, or lay the world across your floor.</p>
+          </li>
+          <li>
+            <h3>Hands or controllers</h3>
+            <p>Place, move and resize it either way.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="faq-title">
+      <div class="wrap">
+      <h2 id="faq-title">Questions</h2>
+      <div class="faq">
+        <details>
+          <summary>Does the server need the mod?</summary>
+          <p>No. It runs only in your game, so it works on any server and in single player.</p>
+        </details>
+        <details>
+          <summary>Do shader packs show up?</summary>
+          <p>No. Resource packs do; shader packs change only the picture on your screen, which the headset never sees.</p>
+        </details>
+        <details>
+          <summary>The headset can't find Minecraft.</summary>
+          <p>Check both are on the same Wi&#8209;Fi, then use <b>Enter address</b> with the address Minecraft shows in chat when you join a world.</p>
+        </details>
+      </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-row">
+      <p class="credit">&copy; 2026 Gagandeep Malhotra</p>
+      <p><a href="https://buymeacoffee.com/gagandeepmalhotra" target="_blank" rel="noopener">Buy me a coffee</a> &middot; <a href="privacy.html">Privacy</a></p>
+      <p>Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p>
+    </div>
+  </footer>
+
+  <script src="main.js?v=23" type="module"></script>
+</body>
+</html>
