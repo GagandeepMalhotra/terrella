@@ -72,7 +72,11 @@ if (nav && stage) {
   addEventListener("scroll", () => { if (!queued) { queued = true; requestAnimationFrame(update); } },
                    { passive: true });
   addEventListener("resize", update);
+  // A refresh part-way down restores the scroll after the first frame; take the right size
+  // without animating to it, then let scrolling animate as normal.
+  nav.classList.add("no-anim");
   update();
+  addEventListener("load", () => { update(); requestAnimationFrame(() => nav.classList.remove("no-anim")); });
 }
 
 // ── Liquid Glass refraction (Chromium only) ─────────────────────────────────

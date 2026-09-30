@@ -8,10 +8,13 @@
   <meta name="color-scheme" content="light dark">
   <meta property="og:title" content="Terrella">
   <meta property="og:description" content="See your Minecraft world as a live 3D hologram in your room, on Meta Quest 3 and 3S.">
-  <meta property="og:image" content="assets/world-2400.webp?v=35">
+  <meta property="og:image" content="assets/world-2400.webp?v=37">
   <link rel="icon" href="assets/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <link rel="stylesheet" href="styles.css?v=35">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&display=swap">
+  <link rel="stylesheet" href="styles.css?v=39">
 </head>
 <body>
   <header class="nav" id="nav">
@@ -20,9 +23,10 @@
         <img src="assets/logo.png" alt="" width="26" height="26">Terrella
       </a>
       <div class="nav-links">
-        <a href="#features">Features</a>
         <a href="#need-title">What you need</a>
-        <a href="#faq-title">Questions</a>
+        <a href="#features">Features</a>
+        <a href="#setup">Set up</a>
+        <a href="#faq-title">FAQs</a>
       </div>
       <a class="nav-cta" href="#setup">Download</a>
     </nav>
@@ -32,12 +36,13 @@
     <section class="stage" aria-labelledby="stage-title">
       <div class="stage-scene-wrap" aria-hidden="true">
       <div class="stage-scene">
-        <img class="stage-world" src="assets/world.webp?v=35" width="3840" height="1280" alt=""
-             srcset="assets/world-2400.webp?v=35 2400w, assets/world.webp?v=35 3840w"
+        <img class="stage-world" src="assets/world.webp?v=37" width="3840" height="1280" alt=""
+             srcset="assets/world-2400.webp?v=37 2400w, assets/world.webp?v=37 3840w"
              sizes="(max-width: 800px) 1700px, 2400px" fetchpriority="high" decoding="async">
         <div class="stage-clouds"></div>
       </div>
       </div>
+      <div class="stage-glass" aria-hidden="true"></div>
       <div class="stage-copy">
         <h1 id="stage-title" class="stage-title">Terrella</h1>
         <p class="stage-line">See your Minecraft world as a live 3D hologram in your room.</p>
@@ -48,7 +53,30 @@
       </div>
     </section>
 
-    <section class="band plain" id="features" aria-labelledby="features-title">
+    <section class="band plain" aria-labelledby="need-title">
+      <div class="wrap">
+        <h2 id="need-title">What you need</h2>
+        <ul class="grid three">
+          <li>
+            <svg class="need-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5c0-2.5 2-4.5 4.5-4.5h15c2.5 0 4.5 2 4.5 4.5v6c0 2.5-2 4.5-4.5 4.5h-3.2a3 3 0 0 1-2.7-1.7l-.4-.8a1.4 1.4 0 0 0-2.4 0l-.4.8a3 3 0 0 1-2.7 1.7H8.5C6 23 4 21 4 18.5z"/><path d="M4 14H2.5M28 14h1.5"/></svg>
+            <h3>Meta Quest 3 or 3S</h3>
+            <p>Mixed reality, with the Terrella app.</p>
+          </li>
+          <li>
+            <svg class="need-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 4 27 9.5v13L16 28 5 22.5v-13z"/><path d="M5 9.5 16 15l11-5.5M16 15v13"/></svg>
+            <h3>Minecraft Java Edition</h3>
+            <p>1.19.4 to 26.2, with Fabric.</p>
+          </li>
+          <li>
+            <svg class="need-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5a17 17 0 0 1 24 0M8.2 16.8a11 11 0 0 1 15.6 0M12.4 21a5 5 0 0 1 7.2 0"/><circle cx="16" cy="25" r="1.2" fill="currentColor"/></svg>
+            <h3>Wi&#8209;Fi network</h3>
+            <p>Your PC and headset on the same one.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band" id="features" aria-labelledby="features-title">
       <div class="wrap">
         <h2 id="features-title">Features</h2>
         <ul class="grid three features">
@@ -81,29 +109,6 @@
             <svg class="need-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 16s5-9 13-9 13 9 13 9-5 9-13 9S3 16 3 16z"/><circle cx="16" cy="16" r="4"/></svg>
             <h3>See yourself through blocks</h3>
             <p>A faint outline shows where you are when you go underground.</p>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="band" aria-labelledby="need-title">
-      <div class="wrap">
-        <h2 id="need-title">What you need</h2>
-        <ul class="grid three">
-          <li>
-            <svg class="need-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5c0-2.5 2-4.5 4.5-4.5h15c2.5 0 4.5 2 4.5 4.5v6c0 2.5-2 4.5-4.5 4.5h-3.2a3 3 0 0 1-2.7-1.7l-.4-.8a1.4 1.4 0 0 0-2.4 0l-.4.8a3 3 0 0 1-2.7 1.7H8.5C6 23 4 21 4 18.5z"/><path d="M4 14H2.5M28 14h1.5"/></svg>
-            <h3>Meta Quest 3 or 3S</h3>
-            <p>Mixed reality, with the Terrella app.</p>
-          </li>
-          <li>
-            <svg class="need-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 4 27 9.5v13L16 28 5 22.5v-13z"/><path d="M5 9.5 16 15l11-5.5M16 15v13"/></svg>
-            <h3>Minecraft Java Edition</h3>
-            <p>1.19.4 to 26.2, with Fabric.</p>
-          </li>
-          <li>
-            <svg class="need-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5a17 17 0 0 1 24 0M8.2 16.8a11 11 0 0 1 15.6 0M12.4 21a5 5 0 0 1 7.2 0"/><circle cx="16" cy="25" r="1.2" fill="currentColor"/></svg>
-            <h3>Wi&#8209;Fi network</h3>
-            <p>Your PC and headset on the same one.</p>
           </li>
         </ul>
       </div>
@@ -162,7 +167,7 @@
 
     <section class="band" aria-labelledby="faq-title">
       <div class="wrap">
-      <h2 id="faq-title">Questions</h2>
+      <h2 id="faq-title">FAQs</h2>
       <div class="faq">
         <details>
           <summary>Does the server need the mod?</summary>
@@ -191,6 +196,6 @@
     <span class="coffee-label">Buy me a coffee</span>
   </a>
 
-  <script src="main.js?v=36" type="module"></script>
+  <script src="main.js?v=38" type="module"></script>
 </body>
 </html>

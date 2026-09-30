@@ -142,6 +142,7 @@ p { margin: 0; }
   transition: height 0.35s cubic-bezier(0.22, 1, 0.36, 1), width 0.35s cubic-bezier(0.22, 1, 0.36, 1),
               color 0.3s ease, background-color 0.3s ease;
 }
+.nav.no-anim .nav-bar { transition: none; }
 .nav.is-compact .nav-bar { height: 46px; width: min(760px, 100% - 24px); }
 .brand {
   display: inline-flex; align-items: center; gap: 8px;
@@ -207,8 +208,8 @@ p { margin: 0; }
   --stage-h: clamp(560px, 82svh, 860px);
   position: relative; overflow: hidden; isolation: isolate;
   height: var(--stage-h);
-  display: grid; place-items: center;
-  background: transparent; color: #ffffff; text-align: center;
+  display: grid; align-items: center;
+  background: transparent; color: #ffffff; text-align: left;
 }
 .stage-scene {
   position: absolute; inset: 0; z-index: -1;
@@ -255,7 +256,7 @@ p { margin: 0; }
 .stage::after {                  /* vignette: darker edges, a soft pool of shade behind the words */
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background:
-    radial-gradient(ellipse 60% 52% at 50% 46%, rgba(0,0,0,0.30), rgba(0,0,0,0) 70%),
+    radial-gradient(ellipse 70% 70% at 22% 50%, rgba(0,0,0,0.30), rgba(0,0,0,0) 70%),
     radial-gradient(ellipse 120% 90% at 50% 45%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.42) 100%),
     linear-gradient(to bottom, rgba(0,0,0,0.30), rgba(0,0,0,0) 18%);
 }
@@ -265,17 +266,19 @@ p { margin: 0; }
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 .stage-copy { position: relative; z-index: 1; }
-.stage-copy { width: min(980px, 100% - 32px); }
+.stage-copy { width: min(980px, 100% - 32px); margin-inline: auto; }
 .stage-title {
-  font-size: clamp(60px, 11.5vw, 144px);
-  line-height: 0.92; letter-spacing: -0.05em; font-weight: 700;
-  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.35);
+  font-family: "Pixelify Sans", var(--font);
+  font-size: clamp(72px, 13vw, 200px);
+  line-height: 0.9; letter-spacing: 0; font-weight: 700;
+  text-shadow: 0 4px 0 rgba(0, 0, 0, 0.18), 0 2px 30px rgba(0, 0, 0, 0.3);
 }
 .stage-line {
-  margin: clamp(14px, 1.8vw, 20px) auto 0; max-width: 30ch; text-wrap: balance;
-  font-size: clamp(20px, 2.4vw, 28px); line-height: 1.22; letter-spacing: -0.02em; font-weight: 500;
-  color: rgba(255, 255, 255, 0.94);
-  text-shadow: 0 1px 16px rgba(0, 0, 0, 0.45);
+  font-family: "Pixelify Sans", var(--font);
+  margin: clamp(16px, 2vw, 26px) 0 0; max-width: 22ch; text-wrap: balance;
+  font-size: clamp(26px, 3.6vw, 48px); line-height: 1.12; letter-spacing: 0; font-weight: 500;
+  color: rgba(255, 255, 255, 0.96);
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.16), 0 1px 18px rgba(0, 0, 0, 0.35);
 }
 .stage-meta {
   margin-top: 16px; font-size: 14px; letter-spacing: 0;
@@ -284,7 +287,7 @@ p { margin: 0; }
 }
 .stage-actions {
   margin-top: clamp(22px, 2.8vw, 30px);
-  display: flex; gap: 24px; justify-content: center; align-items: center; flex-wrap: wrap;
+  display: flex; gap: 24px; justify-content: flex-start; align-items: center; flex-wrap: wrap;
 }
 .stage .button { background: #ffffff; color: #1d1d1f; min-height: 50px; padding: 0 28px; font-size: 18px; }
 .stage .button:hover { background: #f5f5f7; }
@@ -386,25 +389,7 @@ h3 { font-size: 21px; line-height: 1.2; letter-spacing: -0.02em; font-weight: 60
 .footer p { font-size: 12px; color: var(--text-2); letter-spacing: 0; }
 .footer .credit { color: var(--text); }
 
-/* Scrolling the hero away: its words lift and fade, the world drifts a little slower than the
-   page. Tied to the scroll position itself - nothing waits to pop in. */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .stage-copy {
-      animation: copy-away linear both;
-      animation-timeline: view();
-      animation-range: exit 0% exit 90%;
-    }
-    .stage-scene-wrap {
-      animation: world-away linear both;
-      animation-timeline: view();
-      animation-range: exit 0% exit 100%;
-    }
-  }
-}
-@keyframes copy-away { to { opacity: 0; transform: translateY(-80px) scale(0.97); } }
-@keyframes world-away { to { transform: translateY(22%); } }
-.stage-scene-wrap { position: absolute; inset: 0; z-index: -1; will-change: transform; }
+.stage-scene-wrap { position: absolute; inset: 0; z-index: -1; }
 
 /* Buy me a coffee: a glass circle that stays in the corner. */
 .coffee {
@@ -445,7 +430,7 @@ h3 { font-size: 21px; line-height: 1.2; letter-spacing: -0.02em; font-weight: 60
   h2 { margin-bottom: 28px; }
   .stage { --stage-h: clamp(520px, 78svh, 680px); }
   .stage .button { width: min(320px, 100%); }
-  .stage-meta { font-size: 13px; padding-inline: 12px; }
+  .stage-meta { font-size: 13px; }
   .stage + .band { margin-top: -24px; border-radius: 24px 24px 0 0; }
   .step { grid-template-columns: 36px 1fr; gap: 14px; }
   .step-n { width: 36px; height: 36px; font-size: 15px; }
@@ -462,4 +447,21 @@ h3 { font-size: 21px; line-height: 1.2; letter-spacing: -0.02em; font-weight: 60
 @media (max-width: 360px) {
   .stage-title { font-size: 52px; }
   .brand { font-size: 16px; }
+}
+
+/* The hero behind a pane of glass: the world is baked frosted (assets), and the pane adds the
+   glass itself - a cool sheen from the top-left, a bright rim along its top edge, a faint
+   frost - over everything but the words. Static, so it costs nothing as the world drifts. */
+.stage-glass {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    linear-gradient(125deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.06) 28%,
+                    rgba(255, 255, 255, 0) 55%, rgba(255, 255, 255, 0.05) 100%),
+    rgba(255, 255, 255, 0.04);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 0 120px rgba(255, 255, 255, 0.06);
+}
+.stage-clouds { filter: blur(6px); }
+@media (max-width: 600px) {
+  .stage-copy { width: calc(100% - 32px); }
+  .stage .button { width: auto; }
 }
