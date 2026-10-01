@@ -235,27 +235,50 @@ if (clouds) {
 }
 
 // ── Demo film ─────────────────────────────────────────────────────────────────
-// The section stays hidden until assets/demo.mp4 exists, so adding the film is just adding
-// the file.
+// Set to true once assets/demo.mp4 (and optionally assets/demo-poster.jpg) are in place; until
+// then the section stays hidden and nothing is fetched for it.
+const HAS_DEMO = false;
 const demo = document.getElementById("demo");
-if (demo) {
-  fetch("assets/demo.mp4", { method: "HEAD" })
-    .then((r) => { if (r.ok) demo.hidden = false; })
-    .catch(() => {});
+if (demo && HAS_DEMO) {
+  const v = demo.querySelector("video");
+  v.poster = v.dataset.poster;
+  v.src = v.dataset.src;
+  demo.hidden = false;
 }
 
 // ── Hero logo ─────────────────────────────────────────────────────────────────
-// The logo stands exactly as tall as the name and line beside it, whatever they wrap to.
+// The logo stands as tall as the words beside it, whatever they wrap to.
 const head = document.querySelector(".stage-head");
 const text = head && head.querySelector(".stage-text");
 if (head && text && "ResizeObserver" in window) {
   const wide = matchMedia("(min-width: 601px)");
+  const title = text.querySelector(".stage-title");
+  // Wide: as tall as the name, line and button together. Phones: as tall as the name alone.
   const fit = () => {
-    if (wide.matches) head.style.setProperty("--head-h", `${Math.round(text.getBoundingClientRect().height)}px`);
-    else head.style.removeProperty("--head-h");
+    const box = wide.matches ? text : title;
+    head.style.setProperty("--head-h", `${Math.round(box.getBoundingClientRect().height)}px`);
   };
   new ResizeObserver(fit).observe(text);
+  new ResizeObserver(fit).observe(title);
   wide.addEventListener("change", fit);
   if (document.fonts) document.fonts.ready.then(fit);
   fit();
+}
+
+// ── One brand on screen ───────────────────────────────────────────────────────
+// The bar's name and logo appear only once the hero's have scrolled up under it.
+const heroBrand = document.querySelector(".stage-head");
+if (nav && heroBrand && "IntersectionObserver" in window) {
+  const barH = () => (nav.querySelector(".nav-bar")?.getBoundingClientRect().bottom || 64);
+  let io;
+  const watch = () => {
+    if (io) io.disconnect();
+    io = new IntersectionObserver(([e]) => nav.classList.toggle("brand-in-hero", e.isIntersecting),
+                                  { rootMargin: `-${Math.round(barH())}px 0px 0px 0px` });
+    io.observe(heroBrand);
+  };
+  watch();
+  addEventListener("resize", watch);
+} else if (nav) {
+  nav.classList.remove("brand-in-hero");
 }

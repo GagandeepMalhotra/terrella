@@ -537,10 +537,24 @@ h3 { font-size: 21px; line-height: 1.2; letter-spacing: -0.02em; font-weight: 60
   filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.45));
 }
 .stage-text { min-width: 0; }
+/* Phones: the logo sits on the title's line only, as tall as the title; the line and the button
+   run full width beneath. */
 @media (max-width: 600px) {
-  .stage-head { flex-direction: column; align-items: flex-start; gap: 14px; }
-  .stage-logo { height: 92px; }
+  .stage-head { display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 12px; }
+  .stage-text { display: contents; }
+  .stage-logo { grid-row: 1; grid-column: 1; height: var(--head-h, 56px); }
+  .stage-title { grid-row: 1; grid-column: 2; }
+  .stage-line, .stage-actions { grid-column: 1 / -1; }
 }
 @media (prefers-reduced-motion: no-preference) {
   .stage-head { animation: settle 1s cubic-bezier(0.22, 1, 0.36, 1) backwards; }
 }
+
+/* The name and logo are never on screen twice: while the hero's own are in view the bar's stay
+   hidden (their space kept, so nothing shifts), and they settle in once the hero's scroll away. */
+.nav .brand { transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+.nav.brand-in-hero .brand {
+  opacity: 0; transform: translateY(-6px); visibility: hidden; pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.3s ease, visibility 0s linear 0.3s;
+}
+.nav.no-anim .brand { transition: none; }
