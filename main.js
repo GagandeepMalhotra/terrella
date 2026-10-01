@@ -270,10 +270,26 @@ if (head && text && "ResizeObserver" in window) {
 const heroBrand = document.querySelector(".stage-head");
 if (nav && heroBrand && "IntersectionObserver" in window) {
   const barH = () => (nav.querySelector(".nav-bar")?.getBoundingClientRect().bottom || 64);
+  const links = nav.querySelector(".nav-links");
+  // The links move between the left and the centre as the logo leaves or arrives; measured
+  // before and after, and played as one transform so the change glides instead of jumping.
+  const setBrand = (inHero) => {
+    if (nav.classList.contains("brand-in-hero") === inHero) return;
+    const before = links ? links.getBoundingClientRect().left : 0;
+    nav.classList.toggle("brand-in-hero", inHero);
+    if (!links || nav.classList.contains("no-anim") || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const dx = before - links.getBoundingClientRect().left;
+    if (!dx) return;
+    links.style.transition = "none";
+    links.style.transform = `translateX(${dx}px)`;
+    links.getBoundingClientRect();
+    links.style.transition = "transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)";
+    links.style.transform = "";
+  };
   let io;
   const watch = () => {
     if (io) io.disconnect();
-    io = new IntersectionObserver(([e]) => nav.classList.toggle("brand-in-hero", e.isIntersecting),
+    io = new IntersectionObserver(([e]) => setBrand(e.isIntersecting),
                                   { rootMargin: `-${Math.round(barH())}px 0px 0px 0px` });
     io.observe(heroBrand);
   };
@@ -281,4 +297,20 @@ if (nav && heroBrand && "IntersectionObserver" in window) {
   addEventListener("resize", watch);
 } else if (nav) {
   nav.classList.remove("brand-in-hero");
+}
+
+// ── Phone menu ────────────────────────────────────────────────────────────────
+const menuButton = document.querySelector(".nav-menu");
+const sheet = document.getElementById("nav-sheet");
+if (nav && menuButton && sheet) {
+  const setMenu = (open) => {
+    nav.classList.toggle("menu-open", open);
+    menuButton.setAttribute("aria-expanded", String(open));
+    menuButton.setAttribute("aria-label", open ? "Close menu" : "Menu");
+  };
+  menuButton.addEventListener("click", (e) => { e.stopPropagation(); setMenu(!nav.classList.contains("menu-open")); });
+  sheet.addEventListener("click", (e) => { if (e.target.closest("a")) setMenu(false); });
+  document.addEventListener("click", (e) => { if (!nav.contains(e.target)) setMenu(false); });
+  addEventListener("keydown", (e) => { if (e.key === "Escape") setMenu(false); });
+  addEventListener("scroll", () => setMenu(false), { passive: true });
 }

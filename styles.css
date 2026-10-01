@@ -137,7 +137,7 @@ p { margin: 0; }
   pointer-events: auto;
   width: min(980px, 100% - 24px); height: 52px; padding: 0 8px 0 18px;
   border-radius: 999px;
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 0;
   color: var(--text);
   transition: height 0.35s cubic-bezier(0.22, 1, 0.36, 1), width 0.35s cubic-bezier(0.22, 1, 0.36, 1),
               color 0.3s ease, background-color 0.3s ease;
@@ -150,7 +150,8 @@ p { margin: 0; }
 }
 .brand:hover { text-decoration: none; }
 .brand img { height: 28px; width: auto; }
-.nav-links { display: flex; gap: 22px; }
+.nav-links { display: flex; gap: 22px; justify-self: center; }
+.brand { margin-right: 16px; }
 .nav-links a { color: inherit; font-size: 14px; opacity: 0.88; transition: opacity 0.2s ease; }
 .nav-links a:hover { opacity: 1; text-decoration: none; }
 .nav-cta {
@@ -171,7 +172,7 @@ p { margin: 0; }
   --glass-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.35);
 }
 .nav.over-hero .nav-cta { background: #ffffff; color: #1d1d1f; }
-@media (max-width: 720px) { .nav-links { display: none; } }
+
 
 /* Buttons: Apple's pill. */
 .button {
@@ -557,6 +558,48 @@ h3 { font-size: 21px; line-height: 1.2; letter-spacing: -0.02em; font-weight: 60
 .nav .brand { transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
 .nav.brand-in-hero .brand {
   opacity: 0; transform: translateY(-6px); visibility: hidden; pointer-events: none;
+  max-width: 0; margin-right: 0; overflow: hidden;
   transition: opacity 0.25s ease, transform 0.3s ease, visibility 0s linear 0.3s;
 }
+/* Until the logo arrives the links take its place on the left; then they glide to the centre. */
+.nav.brand-in-hero .nav-links { justify-self: start; }
 .nav.no-anim .brand { transition: none; }
+
+/* Phones: the links fold into a menu - two lines that turn into a cross, and a glass sheet that
+   drops from the bar. */
+.nav { flex-direction: column; align-items: center; }
+.nav-end { display: flex; align-items: center; gap: 8px; grid-column: 3; justify-self: end; }
+.nav-links { grid-column: 2; }
+.brand { grid-column: 1; }
+.nav-menu {
+  display: none; place-items: center; width: 36px; height: 36px; border-radius: 50%;
+  border: 0; background: transparent; color: inherit; cursor: pointer; padding: 0;
+}
+.nav-menu span {
+  grid-area: 1 / 1; display: block; width: 18px; height: 2px; border-radius: 2px; background: currentColor;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.nav-menu span:first-child { transform: translateY(-4px); }
+.nav-menu span:last-child { transform: translateY(4px); }
+.nav.menu-open .nav-menu span:first-child { transform: rotate(45deg); }
+.nav.menu-open .nav-menu span:last-child { transform: rotate(-45deg); }
+.nav-sheet {
+  pointer-events: none; opacity: 0; visibility: hidden; transform: translateY(-8px) scale(0.98);
+  transform-origin: top center;
+  width: min(980px, 100% - 24px); margin-top: 8px; padding: 8px; border-radius: 24px;
+  display: none; flex-direction: column; color: var(--text);
+  transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0.35s;
+}
+.nav-sheet a {
+  color: inherit; font-size: 19px; font-weight: 500; padding: 14px 16px; border-radius: 14px;
+}
+.nav-sheet a:hover, .nav-sheet a:focus-visible { background: color-mix(in srgb, var(--text) 7%, transparent); text-decoration: none; }
+.nav.menu-open .nav-sheet {
+  pointer-events: auto; opacity: 1; visibility: visible; transform: none;
+  transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s;
+}
+@media (max-width: 720px) {
+  .nav-links { display: none; }
+  .nav-menu { display: grid; }
+  .nav-sheet { display: flex; }
+}

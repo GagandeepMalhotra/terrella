@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@500;600;700&display=swap">
-  <link rel="stylesheet" href="styles.css?v=48">
+  <link rel="stylesheet" href="styles.css?v=51">
 </head>
 <body>
   <header class="nav brand-in-hero no-anim" id="nav">
@@ -28,8 +28,19 @@
         <a href="#setup">Set up</a>
         <a href="#faq-title">FAQs</a>
       </div>
-      <a class="nav-cta" href="#setup">Download</a>
+      <div class="nav-end">
+        <a class="nav-cta" href="#setup">Download</a>
+        <button class="nav-menu" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav-sheet">
+          <span></span><span></span>
+        </button>
+      </div>
     </nav>
+    <div class="nav-sheet glass" id="nav-sheet">
+      <a href="#need-title">What you need</a>
+      <a href="#features">Features</a>
+      <a href="#setup">Set up</a>
+      <a href="#faq-title">FAQs</a>
+    </div>
   </header>
 
   <main id="top">
@@ -196,6 +207,6 @@
     <span class="coffee-label">Buy me a coffee</span>
   </a>
 
-  <script src="main.js?v=48" type="module"></script>
+  <script src="main.js?v=50" type="module"></script>
 </body>
 </html>
