@@ -483,6 +483,7 @@ h3 { font-size: 21px; line-height: 1.2; letter-spacing: -0.02em; font-weight: 60
 .card h3 { margin: 0; font-size: 22px; }
 .card p { color: var(--text-2); max-width: 36ch; }
 .card-wide { grid-column: span 2; }
+.card-full { grid-column: 1 / -1; min-height: 200px; }
 .card-icon {
   width: 52px; height: 52px; border-radius: 15px; margin-bottom: auto;
   display: grid; place-items: center; color: var(--on-accent);
@@ -513,10 +514,11 @@ h3 { font-size: 21px; line-height: 1.2; letter-spacing: -0.02em; font-weight: 60
 @media (max-width: 900px) {
   .bento { grid-template-columns: repeat(2, 1fr); }
   .card-wide { grid-column: span 2; }
+.card-full { grid-column: 1 / -1; min-height: 200px; }
 }
 @media (max-width: 600px) {
   .bento { grid-template-columns: 1fr; gap: 12px; }
-  .card-wide { grid-column: auto; }
+  .card-wide, .card-full { grid-column: auto; }
   .card { min-height: 0; }
   .card .card-icon { margin-bottom: 18px; }
   .card-photo { min-height: 320px; }
