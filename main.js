@@ -243,3 +243,19 @@ if (demo) {
     .then((r) => { if (r.ok) demo.hidden = false; })
     .catch(() => {});
 }
+
+// ── Hero logo ─────────────────────────────────────────────────────────────────
+// The logo stands exactly as tall as the name and line beside it, whatever they wrap to.
+const head = document.querySelector(".stage-head");
+const text = head && head.querySelector(".stage-text");
+if (head && text && "ResizeObserver" in window) {
+  const wide = matchMedia("(min-width: 601px)");
+  const fit = () => {
+    if (wide.matches) head.style.setProperty("--head-h", `${Math.round(text.getBoundingClientRect().height)}px`);
+    else head.style.removeProperty("--head-h");
+  };
+  new ResizeObserver(fit).observe(text);
+  wide.addEventListener("change", fit);
+  if (document.fonts) document.fonts.ready.then(fit);
+  fit();
+}
