@@ -561,13 +561,17 @@ h3 { font-size: 21px; line-height: 1.2; letter-spacing: -0.02em; font-weight: 60
 /* The name and logo are never on screen twice: while the hero's own are in view the bar's stay
    hidden (their space kept, so nothing shifts), and they settle in once the hero's scroll away. */
 .nav .brand { transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
-.nav.brand-in-hero .brand {
-  opacity: 0; transform: translateY(-6px); visibility: hidden; pointer-events: none;
-  max-width: 0; margin-right: 0; overflow: hidden;
-  transition: opacity 0.25s ease, transform 0.3s ease, visibility 0s linear 0.3s;
+/* Wide screens only: with the links in the bar, the logo waits for the hero's to scroll away.
+   In menu mode the bar always carries the logo. */
+@media (min-width: 581px) {
+  .nav.brand-in-hero .brand {
+    opacity: 0; transform: translateY(-6px); visibility: hidden; pointer-events: none;
+    max-width: 0; margin-right: 0; overflow: hidden;
+    transition: opacity 0.25s ease, transform 0.3s ease, visibility 0s linear 0.3s;
+  }
+  /* Until the logo arrives the links take its place on the left; then they glide to the centre. */
+  .nav.brand-in-hero .nav-links { justify-self: start; }
 }
-/* Until the logo arrives the links take its place on the left; then they glide to the centre. */
-.nav.brand-in-hero .nav-links { justify-self: start; }
 .nav.no-anim .brand { transition: none; }
 
 /* Phones: the links fold into a menu - two lines that turn into a cross, and a glass sheet that
@@ -603,7 +607,7 @@ h3 { font-size: 21px; line-height: 1.2; letter-spacing: -0.02em; font-weight: 60
   pointer-events: auto; opacity: 1; visibility: visible; transform: none;
   transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s;
 }
-@media (max-width: 720px) {
+@media (max-width: 580px) {
   .nav-links { display: none; }
   .nav-menu { display: grid; }
   .nav-sheet { display: flex; }
@@ -611,7 +615,7 @@ h3 { font-size: 21px; line-height: 1.2; letter-spacing: -0.02em; font-weight: 60
 
 /* Phones: Download lives in the menu. */
 .sheet-cta { display: none; }
-@media (max-width: 720px) {
+@media (max-width: 580px) {
   .nav-cta { display: none; }
   .nav-sheet .sheet-cta {
     display: block; margin-top: 6px; text-align: center;
