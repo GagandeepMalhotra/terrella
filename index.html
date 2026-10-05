@@ -81,7 +81,7 @@
           <li>
             <svg class="need-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 4 27 9.5v13L16 28 5 22.5v-13z"/><path d="M5 9.5 16 15l11-5.5M16 15v13"/></svg>
             <h3>Minecraft Java Edition</h3>
-            <p>1.19.4 to 26.2, with Fabric.</p>
+            <p>1.19.4 to 26.2 with Fabric, or 1.20.1 to 26.2 with NeoForge.</p>
           </li>
           <li>
             <svg class="need-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5a17 17 0 0 1 24 0M8.2 16.8a11 11 0 0 1 15.6 0M12.4 21a5 5 0 0 1 7.2 0"/><circle cx="16" cy="25" r="1.2" fill="currentColor"/></svg>
@@ -145,15 +145,23 @@
           <span class="step-n" aria-hidden="true">1</span>
           <div class="step-body">
             <h3>Install the mod</h3>
-            <p>Pick your Minecraft version, then put the file in your <code>mods</code> folder.
-               It needs <a href="https://fabricmc.net/use/installer/">Fabric Loader</a> and
-               <a href="https://modrinth.com/mod/fabric-api">Fabric API</a>.</p>
+            <p>Pick your mod loader and Minecraft version, then put the file in your <code>mods</code> folder.
+               <span id="needs-fabric">It needs <a href="https://fabricmc.net/use/installer/">Fabric Loader</a> and
+               <a href="https://modrinth.com/mod/fabric-api">Fabric API</a>.</span>
+               <span id="needs-neoforge" hidden>It needs <a href="https://neoforged.net/">NeoForge</a>.</span></p>
             <div class="picker">
+              <label class="select">
+                <span class="visually-hidden">Mod loader</span>
+                <select id="mc-loader">
+                  <option value="fabric">Fabric</option>
+                  <option value="neoforge">NeoForge</option>
+                </select>
+              </label>
               <label class="select">
                 <span class="visually-hidden">Minecraft version</span>
                 <select id="mc-version"></select>
               </label>
-              <a id="mod-download" class="button" href="downloads/voxelmr-mod-mc26.2.jar" download>Download</a>
+              <a id="mod-download" class="button" href="downloads/terrella-mod-mc26.2.jar" download>Download</a>
             </div>
           </div>
         </li>

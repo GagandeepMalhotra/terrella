@@ -22,20 +22,47 @@ const MOD_FOR = {
   "1.19.4":  "terrella-mod-mc1.19.4.jar",
 };
 
+// The NeoForge builds: one per Minecraft version, each loading on exactly that version - every
+// version Fabric has except 1.19.4, which is older than NeoForge itself.
+const NEO_VERSIONS = ["26.2", "26.1.2", "1.21.11", "1.21.10", "1.21.9", "1.21.8", "1.21.7", "1.21.6",
+                      "1.21.5", "1.21.4", "1.21.3", "1.21.1", "1.20.6", "1.20.4", "1.20.2", "1.20.1"];
+const NEO_FOR = Object.fromEntries(NEO_VERSIONS.map(v => [v, `neoforge/terrella-mod-mc${v}-neoforge.jar`]));
+const LOADERS = {
+  fabric:   { jars: MOD_FOR, needs: "needs-fabric" },
+  neoforge: { jars: NEO_FOR, needs: "needs-neoforge" },
+};
+
 // ── Version picker ────────────────────────────────────────────────────────────
+const loader = document.getElementById("mc-loader");
 const select = document.getElementById("mc-version");
 const download = document.getElementById("mod-download");
-for (const v of Object.keys(MOD_FOR)) select.add(new Option(`Minecraft ${v}`, v));
 
-const remembered = (() => { try { return localStorage.getItem("mc-version"); } catch { return null; } })();
-if (remembered && MOD_FOR[remembered]) select.value = remembered;
+const recall = key => { try { return localStorage.getItem(key); } catch { return null; } };
+const keep = (key, value) => { try { localStorage.setItem(key, value); } catch {} };
+
+if (LOADERS[recall("mc-loader")]) loader.value = recall("mc-loader");
+
+// Fills the version list for the chosen loader, keeping the chosen version where that loader has it.
+function fillVersions() {
+  const jars = LOADERS[loader.value].jars;
+  const wanted = select.value || recall("mc-version");
+  select.length = 0;
+  for (const v of Object.keys(jars)) select.add(new Option(`Minecraft ${v}`, v));
+  if (wanted && jars[wanted]) select.value = wanted;
+  for (const [name, l] of Object.entries(LOADERS))
+    document.getElementById(l.needs).hidden = name !== loader.value;
+  keep("mc-loader", loader.value);
+}
 
 function pick() {
-  download.href = `downloads/${MOD_FOR[select.value]}`;
-  download.textContent = `Download for ${select.value}`;
-  try { localStorage.setItem("mc-version", select.value); } catch {}
+  const name = loader.value === "neoforge" ? "NeoForge " : "";
+  download.href = `downloads/${LOADERS[loader.value].jars[select.value]}`;
+  download.textContent = `Download for ${name}${select.value}`;
+  keep("mc-version", select.value);
 }
+loader.addEventListener("change", () => { fillVersions(); pick(); });
 select.addEventListener("change", pick);
+fillVersions();
 pick();
 
 // ── App link ──────────────────────────────────────────────────────────────────
