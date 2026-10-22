@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@500;600;700&display=swap">
-  <link rel="stylesheet" href="styles.css?v=54">
+  <link rel="stylesheet" href="styles.css?v=56">
 </head>
 <body>
   <header class="nav brand-in-hero no-anim" id="nav">
@@ -97,7 +97,7 @@
         <h2 id="features-title">Features</h2>
         <ul class="bento">
           <li class="card card-wide card-photo">
-            <img src="assets/feature-live.webp" alt="A river winding between a cherry grove and a meadow, seen from above" width="1280" height="720" loading="lazy" decoding="async">
+            <img src="assets/feature-live.webp?v=2" alt="A Minecraft village with its villagers, live on a white table" width="1280" height="720" loading="lazy" decoding="async">
             <div class="card-copy">
               <span class="card-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 16a11 11 0 0 1 19-7.5M27 16a11 11 0 0 1-19 7.5"/><path d="M24 4v4.5h-4.5M8 28v-4.5h4.5"/></svg></span>
               <h3>Live from your game</h3>
@@ -109,20 +109,29 @@
             <h3>Your mods and resource packs</h3>
             <p>They show up too, because every picture comes from Minecraft itself.</p>
           </li>
-          <li class="card ">
-            <span class="card-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h24M7 20l2-10h14l2 10M9 20v7M23 20v7"/></svg></span>
-            <h3>On a table or your floor</h3>
-            <p>Place the world on a table, or lay it across your floor.</p>
+          <li class="card card-photo">
+            <img src="assets/feature-floor.webp?v=1" alt="The Nether laid across a white floor" width="1280" height="720" loading="lazy" decoding="async">
+            <div class="card-copy">
+              <span class="card-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h24M7 20l2-10h14l2 10M9 20v7M23 20v7"/></svg></span>
+              <h3>On a table or your floor</h3>
+              <p>Place the world on a table, or lay it across your floor.</p>
+            </div>
           </li>
-          <li class="card ">
-            <span class="card-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12V4h8M28 20v8h-8M4 4l9 9M28 28l-9-9"/></svg></span>
-            <h3>Any size and height</h3>
-            <p>Resize it, and choose how much above and below you to show.</p>
+          <li class="card card-photo">
+            <img class="focus-right" src="assets/feature-size.webp?v=1" alt="The Terrella panel's size slider beside a village on a table" width="1280" height="720" loading="lazy" decoding="async">
+            <div class="card-copy">
+              <span class="card-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12V4h8M28 20v8h-8M4 4l9 9M28 28l-9-9"/></svg></span>
+              <h3>Any size and height</h3>
+              <p>Resize it, and choose how much above and below you to show.</p>
+            </div>
           </li>
-          <li class="card ">
-            <span class="card-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 15V7.5a2 2 0 0 1 4 0V14M15 13.5V5.5a2 2 0 0 1 4 0V14M19 14V8a2 2 0 0 1 4 0v9c0 6-4 10-9 10-3.5 0-5.5-1.5-7.5-4.5L4.8 18.9a2 2 0 0 1 3.3-2.2L11 20"/></svg></span>
-            <h3>Hands or controllers</h3>
-            <p>Pinch or pull the trigger to place, move and resize it.</p>
+          <li class="card card-photo">
+            <img class="focus-right" src="assets/feature-hands.webp?v=1" alt="A controller pointing at the Terrella panel beside the world" width="1280" height="720" loading="lazy" decoding="async">
+            <div class="card-copy">
+              <span class="card-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 15V7.5a2 2 0 0 1 4 0V14M15 13.5V5.5a2 2 0 0 1 4 0V14M19 14V8a2 2 0 0 1 4 0v9c0 6-4 10-9 10-3.5 0-5.5-1.5-7.5-4.5L4.8 18.9a2 2 0 0 1 3.3-2.2L11 20"/></svg></span>
+              <h3>Hands or controllers</h3>
+              <p>Pinch or pull the trigger to place, move and resize it.</p>
+            </div>
           </li>
         </ul>
       </div>
@@ -132,7 +141,7 @@
       <div class="wrap">
         <h2 id="demo-title">See it on Meta Quest&nbsp;3</h2>
         <div class="demo-frame">
-          <video controls playsinline preload="none" data-poster="assets/demo-poster.jpg" data-src="assets/demo.mp4"></video>
+          <video controls playsinline preload="none" data-poster="assets/demo-poster.jpg?v=1" data-src="assets/demo.mp4?v=1"></video>
         </div>
       </div>
     </section>
@@ -216,6 +225,6 @@
     <span class="coffee-label">Buy me a coffee</span>
   </a>
 
-  <script src="main.js?v=51" type="module"></script>
+  <script src="main.js?v=53" type="module"></script>
 </body>
 </html>

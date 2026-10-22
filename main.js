@@ -65,6 +65,127 @@ select.addEventListener("change", pick);
 fillVersions();
 pick();
 
+// ── Dropdowns with a height limit ─────────────────────────────────────────────
+// A browser's own list for a <select> cannot be given a height: with seventeen Minecraft
+// versions it ran down the whole screen. Each picker gets a list of its own that shows about
+// seven rows and scrolls the rest. The <select> stays underneath as the value everything reads
+// and the "change" it fires, so the code above is unchanged; the list only drives it.
+function dropdown(native) {
+  const wrap = native.closest(".select");
+  const label = wrap.querySelector(".visually-hidden")?.textContent || "";
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "dd-button";
+  button.setAttribute("aria-haspopup", "listbox");
+  button.setAttribute("aria-expanded", "false");
+  const list = document.createElement("ul");
+  list.className = "dd-list";
+  list.setAttribute("role", "listbox");
+  list.id = native.id + "-list";
+  list.tabIndex = -1;
+  list.hidden = true;
+  if (label) { button.setAttribute("aria-label", label); list.setAttribute("aria-label", label); }
+  button.setAttribute("aria-controls", list.id);
+  native.tabIndex = -1;
+  native.setAttribute("aria-hidden", "true");
+  wrap.classList.add("is-enhanced");
+  wrap.append(button, list);
+
+  let active = -1;
+  const items = () => [...list.children];
+
+  function render() {
+    list.replaceChildren(...[...native.options].map((o, i) => {
+      const li = document.createElement("li");
+      li.id = `${native.id}-opt-${i}`;
+      li.setAttribute("role", "option");
+      li.dataset.value = o.value;
+      li.textContent = o.text;
+      li.setAttribute("aria-selected", String(o.selected));
+      return li;
+    }));
+    button.textContent = native.selectedOptions[0]?.text || "";
+  }
+
+  function setActive(i) {
+    const all = items();
+    if (!all.length) return;
+    active = Math.max(0, Math.min(all.length - 1, i));
+    all.forEach((li, n) => li.classList.toggle("is-active", n === active));
+    list.setAttribute("aria-activedescendant", all[active].id);
+    all[active].scrollIntoView({ block: "nearest" });
+  }
+
+  function open() {
+    if (!list.hidden) return;
+    render();
+    list.hidden = false;
+    button.setAttribute("aria-expanded", "true");
+    // Above the button when there is not room below it.
+    const below = window.innerHeight - button.getBoundingClientRect().bottom;
+    wrap.classList.toggle("opens-up", below < Math.min(list.scrollHeight, 300) + 16
+                                       && button.getBoundingClientRect().top > below);
+    setActive(native.selectedIndex);
+    list.focus({ preventScroll: true });
+  }
+
+  function close(focusButton = true) {
+    if (list.hidden) return;
+    list.hidden = true;
+    button.setAttribute("aria-expanded", "false");
+    if (focusButton) button.focus();
+  }
+
+  function choose(i) {
+    if (i < 0 || i >= native.options.length) return;
+    if (native.selectedIndex !== i) {
+      native.selectedIndex = i;
+      native.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+    render();
+    close();
+  }
+
+  button.addEventListener("click", () => (list.hidden ? open() : close()));
+  button.addEventListener("keydown", e => {
+    if (["ArrowDown", "ArrowUp", "Enter", " "].includes(e.key)) { e.preventDefault(); open(); }
+  });
+  list.addEventListener("click", e => {
+    const li = e.target.closest("li");
+    if (li) choose(items().indexOf(li));
+  });
+  list.addEventListener("pointermove", e => {
+    const li = e.target.closest("li");
+    if (li) setActive(items().indexOf(li));
+  });
+  list.addEventListener("keydown", e => {
+    const page = Math.max(1, Math.floor(list.clientHeight / (items()[0]?.offsetHeight || 40)) - 1);
+    const moves = { ArrowDown: active + 1, ArrowUp: active - 1, Home: 0, End: items().length - 1,
+                    PageDown: active + page, PageUp: active - page };
+    if (e.key in moves) { e.preventDefault(); setActive(moves[e.key]); }
+    else if (e.key === "Enter" || e.key === " ") { e.preventDefault(); choose(active); }
+    else if (e.key === "Escape") { e.preventDefault(); close(); }
+    else if (e.key === "Tab") close(false);
+    else if (e.key.length === 1) {
+      // Typing jumps to the next entry that has the character, e.g. "2" for the 26.x versions.
+      const all = items();
+      for (let n = 1; n <= all.length; n++) {
+        const i = (active + n) % all.length;
+        if (all[i].dataset.value.toLowerCase().startsWith(e.key.toLowerCase())) { setActive(i); break; }
+      }
+    }
+  });
+  document.addEventListener("pointerdown", e => { if (!wrap.contains(e.target)) close(false); });
+  native.addEventListener("change", render);
+  render();
+  return { render };
+}
+
+const loaderDropdown = dropdown(loader);
+const versionDropdown = dropdown(select);
+// The version list is refilled when the loader changes; the dropdown shows what it holds now.
+loader.addEventListener("change", () => versionDropdown.render());
+
 // ── App link ──────────────────────────────────────────────────────────────────
 if (APP_URL) {
   const link = document.getElementById("app-link");
@@ -264,7 +385,7 @@ if (clouds) {
 // ── Demo film ─────────────────────────────────────────────────────────────────
 // Set to true once assets/demo.mp4 (and optionally assets/demo-poster.jpg) are in place; until
 // then the section stays hidden and nothing is fetched for it.
-const HAS_DEMO = false;
+const HAS_DEMO = true;
 const demo = document.getElementById("demo");
 if (demo && HAS_DEMO) {
   const v = demo.querySelector("video");
