@@ -536,9 +536,18 @@ h3 { font-size: 21px; line-height: 1.2; letter-spacing: -0.02em; font-weight: 60
 .card-photo { padding: 0; min-height: 360px; color: #ffffff; }
 .card-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .card-photo img.focus-right { object-position: 64% 50%; }
+/* Words and icons sit on any picture: snow, grass, lava. The shade under the words is deep enough
+   for white text on snow, and the icon is a dark tile, since a green one vanished into grass. */
 .card-photo::after {
   content: ""; position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.25) 45%, rgba(0, 0, 0, 0) 70%);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.55) 30%, rgba(0, 0, 0, 0.15) 55%, rgba(0, 0, 0, 0) 72%);
+}
+.card-photo h3, .card-photo p { text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 2px 14px rgba(0, 0, 0, 0.45); }
+.card-photo .card-icon {
+  color: #ffffff;
+  background: rgba(12, 14, 18, 0.72);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22), 0 6px 18px -6px rgba(0, 0, 0, 0.6);
 }
 .card-copy {
   position: relative; z-index: 1; height: 100%;
@@ -546,7 +555,7 @@ h3 { font-size: 21px; line-height: 1.2; letter-spacing: -0.02em; font-weight: 60
   display: flex; flex-direction: column; justify-content: flex-end; gap: 6px;
 }
 .card-photo .card-icon { margin-bottom: auto; }
-.card-photo p { color: rgba(255, 255, 255, 0.86); }
+.card-photo p { color: rgba(255, 255, 255, 0.94); }
 .card-dark {
   background:
     radial-gradient(circle at 85% 20%, rgba(108, 192, 95, 0.32), rgba(108, 192, 95, 0) 55%),
@@ -557,7 +566,10 @@ h3 { font-size: 21px; line-height: 1.2; letter-spacing: -0.02em; font-weight: 60
 @media (max-width: 900px) {
   .bento { grid-template-columns: repeat(2, 1fr); }
   .card-wide { grid-column: span 2; }
-.card-full { grid-column: 1 / -1; min-height: 200px; }
+  /* Seven cards in two columns: the lead stays wide and the last one takes a single cell, so the
+     six under the lead fill three rows with nothing left alone. */
+  .card-wide.card-end { grid-column: auto; }
+  .card-full { grid-column: 1 / -1; min-height: 200px; }
 }
 @media (max-width: 600px) {
   .bento { grid-template-columns: 1fr; gap: 12px; }
